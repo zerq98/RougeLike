@@ -7,7 +7,7 @@ namespace RougeLike
 {
     public class Game
     {
-        private readonly CharacterService _characterService;
+        private CharacterService _characterService;
         private readonly MenuActionService _actionService;
 
         public Game(CharacterService characterService, MenuActionService actionService)
@@ -39,6 +39,7 @@ namespace RougeLike
                     case 1:
                         DungeonService dungeonService = new DungeonService(_characterService);
                         int selectedOption = 0;
+                        bool isDungeonFinished = false;
                         do
                         {
                             Console.Clear();
@@ -47,9 +48,16 @@ namespace RougeLike
                             switch (selectedOption)
                             {
                                 case 1:
-                                    dungeonService.NextFight(_actionService);
+                                    if (dungeonService.CheckCount())
+                                    {
+                                        dungeonService.NextFight(_actionService);
+                                    }
+                                    else
+                                    {
+                                        isDungeonFinished = true;
+                                        _characterService = dungeonService.ExitMenu()
+                                    }
                                     break;
-
                                 case 2:
                                     Console.Clear();
                                     int cost = 250 * _characterService.GetHeroLevel();
@@ -67,8 +75,12 @@ namespace RougeLike
                                         }
                                     }
                                     break;
+                                case 3:
+                                    isDungeonFinished = true;
+                                    _characterService = dungeonService.ExitMenu()
+                                    break;
                             }
-                        } while (selectedOption != 3);
+                        } while (!isDungeonFinished);
                         break;
 
                     case 2:

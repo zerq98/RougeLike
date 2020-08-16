@@ -51,7 +51,21 @@ namespace RougeLike.Dungeon
 
         public CharacterService ExitMenu()
         {
+            _characterService.Heal();
             return _characterService;
+        }
+
+        public bool CheckCount()
+        {
+            if (monstersCount > 0)
+            {
+                monstersCount--;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
