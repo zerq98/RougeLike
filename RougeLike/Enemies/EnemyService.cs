@@ -82,18 +82,39 @@ namespace RougeLike.Enemies
             }
         }
 
-        private bool DealDamage(int heroDamage)
+        public void ShowMonsterInfo()
         {
-            enemy.Health -= heroDamage - enemy.Armor;
+            Console.WriteLine($"Race: {enemy.Race}");
+            Console.WriteLine($"Health: {enemy.Health}");
+            Console.WriteLine($"Type: {enemy.Type}");
+        }
 
-            if (enemy.Health > 0)
+        public bool DealDamage(int heroDamage)
+        {
+            int armorInFight = enemy.Armor;
+            while (heroDamage <= armorInFight)
             {
-                return false;
+                armorInFight /= 2;
             }
-            else
+
+            enemy.Health -= (heroDamage - armorInFight);
+            Console.Clear();
+            Console.WriteLine($"You dealt {(heroDamage - armorInFight)}");
+            Console.WriteLine("Click enter to continue...");
+            Console.Read();
+            if (enemy.Health > 0)
             {
                 return true;
             }
+            else
+            {
+                return false;
+            }
+        }
+
+        public int[] GetHiddenStats()
+        {
+            return new int[] { enemy.AttackDamage, enemy.AttackSpeed, enemy.Armor };
         }
     }
 }

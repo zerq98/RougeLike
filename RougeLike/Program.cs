@@ -26,10 +26,18 @@ namespace RougeLike
             actionService.AddNewAction(4, "Berserker", "Select Class");
 
             actionService.AddNewAction(1, "Go to dungeon", "Game Menu");
-            actionService.AddNewAction(2, "Go to shop", "Game Menu");
+            actionService.AddNewAction(2, "Go to shop(not implemented yet)", "Game Menu");
             actionService.AddNewAction(3, "Check hero info", "Game Menu");
-            actionService.AddNewAction(4, "Save", "Game Menu");
+            actionService.AddNewAction(4, "Save(not implemented yet)", "Game Menu");
             actionService.AddNewAction(5, "Exit", "Game Menu");
+
+            actionService.AddNewAction(1, "Next fight", "Dungeon");
+            actionService.AddNewAction(2, "Heal", "Dungeon");
+            actionService.AddNewAction(3, "Exit Dungeon", "Dungeon");
+
+            actionService.AddNewAction(1, "Attack", "Fight");
+            actionService.AddNewAction(2, "Use item(not implemented yet)", "Fight");
+            actionService.AddNewAction(3, "Try to escape", "Fight");
 
             return actionService;
         }
