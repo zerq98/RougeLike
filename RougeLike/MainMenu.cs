@@ -63,12 +63,9 @@ namespace RougeLike
                         }
                         else
                         {
-                            do
-                            {
-                                Console.Clear();
-                                Console.WriteLine("You don't have any saves!");
-                                Console.WriteLine("Click enter to continue");
-                            } while (Console.ReadKey().Key != ConsoleKey.Enter);
+                            Console.Clear();
+                            Console.WriteLine("Something went wrong!");
+                            Console.WriteLine("Click enter to continue");
                             Console.Clear();
                         }
                         break;

@@ -51,6 +51,21 @@ namespace RougeLike
                                     break;
 
                                 case 2:
+                                    Console.Clear();
+                                    int cost = 250 * _characterService.GetHeroLevel();
+                                    Console.WriteLine($"Do you want to heal your hero for {cost} gold? (y/n)");
+                                    var confirmHeal = Console.ReadLine();
+                                    if (confirmHeal == "y" || confirmHeal == "Y")
+                                    {
+                                        if (_characterService.Heal(cost))
+                                        {
+                                            Console.WriteLine("Your hero was fully healed!");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Sorry you don't have enough gold");
+                                        }
+                                    }
                                     break;
                             }
                         } while (selectedOption != 3);
@@ -65,6 +80,20 @@ namespace RougeLike
                         break;
 
                     case 4:
+                        if (_characterService.SaveCharacter())
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Your character was successfully saved");
+                            Console.WriteLine("Press enter to continue...");
+                            Console.Read();
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Something went wrong try again");
+                            Console.WriteLine("Press enter to continue...");
+                            Console.Read();
+                        }
                         break;
 
                     case 5:

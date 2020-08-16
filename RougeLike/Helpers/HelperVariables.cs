@@ -2,6 +2,6 @@
 {
     public static class HelperVariables
     {
-        public static readonly string saveFile = "\\Save\\saveFile.json";
+        public static readonly string saveFile = "saveFile.xml";
     }
 }
