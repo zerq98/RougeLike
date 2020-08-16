@@ -1,4 +1,5 @@
-﻿using RougeLike.Menu;
+﻿using RougeLike.Dungeon;
+using RougeLike.Menu;
 using RougeLike.PlayerFiles;
 using System;
 
@@ -36,6 +37,23 @@ namespace RougeLike
                 switch (chosenOption)
                 {
                     case 1:
+                        DungeonService dungeonService = new DungeonService(_characterService);
+                        int selectedOption = 0;
+                        do
+                        {
+                            Console.Clear();
+                            selectedOption = dungeonService.DungeonMenu(_actionService);
+
+                            switch (selectedOption)
+                            {
+                                case 1:
+                                    dungeonService.NextFight(_actionService);
+                                    break;
+
+                                case 2:
+                                    break;
+                            }
+                        } while (selectedOption != 3);
                         break;
 
                     case 2:

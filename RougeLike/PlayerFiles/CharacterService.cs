@@ -119,5 +119,56 @@ namespace RougeLike.PlayerFiles
 
             return selectedAction;
         }
+
+        public int GetHeroLevel()
+        {
+            return character.Level;
+        }
+
+        public void ShowHeroInfoInFight()
+        {
+            Console.WriteLine($"Name: {character.Name}");
+            Console.WriteLine($"Health: {character.Health}");
+        }
+
+        public int[] GetHiddenStats()
+        {
+            return new int[] { character.AttackDamage, character.AttackSpeed, character.Armor };
+        }
+
+        public bool GetDamage(int enemyAttack)
+        {
+            int armorInFight = character.Armor;
+            while (enemyAttack <= armorInFight)
+            {
+                armorInFight /= 2;
+            }
+
+            character.Health -= (enemyAttack - armorInFight);
+            Console.Clear();
+            Console.WriteLine($"Enemy dealt {(enemyAttack - armorInFight)}");
+            Console.WriteLine("Click enter to continue...");
+            Console.Read();
+            if (character.Health > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void UpdateCharacterAfterFight(int money, int experience)
+        {
+            character.Money += money;
+            character.Experience += experience;
+            if (character.Experience >= character.NeededExperience)
+            {
+                character.Level++;
+                character.Experience -= character.NeededExperience;
+                character.NeededExperience += 500 * (character.Level - 1);
+            }
+        }
     }
 }
