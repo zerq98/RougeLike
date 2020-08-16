@@ -28,7 +28,7 @@ namespace RougeLike
             actionService.AddNewAction(1, "Go to dungeon", "Game Menu");
             actionService.AddNewAction(2, "Go to shop(not implemented yet)", "Game Menu");
             actionService.AddNewAction(3, "Check hero info", "Game Menu");
-            actionService.AddNewAction(4, "Save(not implemented yet)", "Game Menu");
+            actionService.AddNewAction(4, "Save", "Game Menu");
             actionService.AddNewAction(5, "Exit", "Game Menu");
 
             actionService.AddNewAction(1, "Next fight", "Dungeon");

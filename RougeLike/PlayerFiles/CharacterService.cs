@@ -1,6 +1,8 @@
-﻿using RougeLike.Menu;
+﻿using RougeLike.Helpers;
+using RougeLike.Menu;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace RougeLike.PlayerFiles
 {
@@ -90,7 +92,38 @@ namespace RougeLike.PlayerFiles
 
         public bool LoadCharacter()
         {
-            return false;
+            try
+            {
+                System.Xml.Serialization.XmlSerializer reader =
+                new System.Xml.Serialization.XmlSerializer(typeof(Character));
+
+                StreamReader streamReader = new StreamReader(HelperVariables.saveFile);
+                character = (Character)reader.Deserialize(streamReader);
+                streamReader.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool SaveCharacter()
+        {
+            try
+            {
+                System.Xml.Serialization.XmlSerializer writer =
+                new System.Xml.Serialization.XmlSerializer(typeof(Character));
+
+                FileStream file = System.IO.File.Create(HelperVariables.saveFile);
+                writer.Serialize(file, character);
+                file.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public string GetCharacterName()
@@ -169,6 +202,21 @@ namespace RougeLike.PlayerFiles
                 character.Experience -= character.NeededExperience;
                 character.NeededExperience += 500 * (character.Level - 1);
             }
+        }
+
+        public void Heal()
+        {
+            character.Health = character.MaxHealth;
+        }
+
+        public bool Heal(int cost)
+        {
+            if(cost <= character.Money)
+            {
+                character.Health = character.MaxHealth;
+                return true;
+            }
+            return false;
         }
     }
 }
