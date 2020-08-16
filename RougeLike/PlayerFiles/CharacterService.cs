@@ -201,6 +201,10 @@ namespace RougeLike.PlayerFiles
                 character.Level++;
                 character.Experience -= character.NeededExperience;
                 character.NeededExperience += 500 * (character.Level - 1);
+                character.MaxHealth += 200;
+                character.Armor += 15;
+                character.AttackDamage += 15;
+                character.AttackSpeed += 15;
             }
         }
 
