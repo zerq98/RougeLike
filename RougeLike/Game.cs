@@ -87,6 +87,8 @@ namespace RougeLike
                                     break;
                             }
                         } while (!isDungeonFinished);
+
+                        _characterService.SaveCharacter();
                         break;
 
                     case 2:

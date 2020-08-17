@@ -14,6 +14,8 @@ namespace RougeLike.StuffFiles
 
         public int Value { get; set; }
 
+        public int Cost { get; set; }
+
         public Class CompatibiltyClass { get; set; }
 
         public int MinLevel { get; set; }

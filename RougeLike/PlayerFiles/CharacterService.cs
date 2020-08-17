@@ -70,7 +70,7 @@ namespace RougeLike.PlayerFiles
                     character.Health = 450;
                     character.MaxHealth = 450;
                     character.AttackDamage = 25;
-                    character.Armor = 45;
+                    character.Armor = 35;
                     character.AttackSpeed = 10;
                     break;
 
@@ -148,6 +148,11 @@ namespace RougeLike.PlayerFiles
             return character.Level;
         }
 
+        public Class GetHeroClass()
+        {
+            return character.Class;
+        }
+
         public void ShowHeroInfoInFight()
         {
             Console.WriteLine($"Name: {character.Name}");
@@ -192,10 +197,15 @@ namespace RougeLike.PlayerFiles
                 character.Experience -= character.NeededExperience;
                 character.NeededExperience += 500 * (character.Level - 1);
                 character.MaxHealth += 200;
-                character.Armor += 15;
+                character.Armor += 10;
                 character.AttackDamage += 15;
                 character.AttackSpeed += 15;
             }
+        }
+
+        public int GetMoneyCount()
+        {
+            return character.Money;
         }
 
         public void Heal()
@@ -233,7 +243,78 @@ namespace RougeLike.PlayerFiles
         {
             character.Inventory.Items.Add(item);
 
+            if (!item.IsUsable)
+            {
+                switch (item.HeroStatToChange)
+                {
+                    case "Attack Damage":
+                        character.AttackDamage += item.Value;
+                        break;
+
+                    case "Attack Speed":
+                        character.AttackSpeed += item.Value;
+                        break;
+
+                    case "Armor":
+                        character.Armor += item.Value;
+                        break;
+
+                    case "Health":
+                        character.Health += item.Value;
+                        break;
+                }
+            }
+
             return character.Inventory.Items.Count;
+        }
+
+        public int SellItem(int id)
+        {
+            Item item = character.Inventory.Items[id];
+
+            if (!item.IsUsable)
+            {
+                switch (item.HeroStatToChange)
+                {
+                    case "Attack Damage":
+                        character.AttackDamage -= item.Value;
+                        break;
+
+                    case "Attack Speed":
+                        character.AttackSpeed -= item.Value;
+                        break;
+
+                    case "Armor":
+                        character.Armor -= item.Value;
+                        break;
+
+                    case "Health":
+                        character.Health -= item.Value;
+                        break;
+                }
+            }
+
+            character.Money += (item.Cost / 2);
+
+            character.Inventory.Items.Remove(item);
+
+            return character.Money;
+        }
+
+        public bool CanBuy(int cost)
+        {
+            if (!CheckIsInventoryFull() && character.Money >= cost)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void BuyItem(Item item)
+        {
+            character.Money -= item.Cost;
+            AddItemToInventory(item);
         }
     }
 }

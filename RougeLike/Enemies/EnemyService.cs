@@ -63,7 +63,7 @@ namespace RougeLike.Enemies
                         Race = race,
                         Health = (300 * heroLevel),
                         AttackDamage = (7 * heroLevel),
-                        Armor = (40 * heroLevel),
+                        Armor = (30 * heroLevel),
                         AttackSpeed = (5 * heroLevel)
                     };
                     break;

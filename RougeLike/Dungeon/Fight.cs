@@ -67,11 +67,12 @@ namespace RougeLike.Dungeon
                         break;
 
                     case 2:
-                        List<Item> heroItems = characterService.GetItems();
                         int selectedItem;
                         do
                         {
-                            int counter = 0;
+                            List<Item> heroItems = characterService.GetItems();
+                            Console.Clear();
+                            int counter = 1;
                             Console.WriteLine("Your inventory:");
                             foreach (var item in heroItems)
                             {
@@ -82,11 +83,11 @@ namespace RougeLike.Dungeon
                             int.TryParse(Console.ReadKey().KeyChar.ToString(), out selectedItem);
 
                             Console.Clear();
-                            if (selectedItem != 0 && selectedItem < heroItems.Count)
+                            if (selectedItem != 0 && selectedItem - 1 < heroItems.Count)
                             {
-                                if (heroItems[selectedItem].IsUsable)
+                                if (heroItems[selectedItem - 1].IsUsable)
                                 {
-                                    characterService.UseItem(selectedItem);
+                                    characterService.UseItem(selectedItem - 1);
                                 }
                                 else
                                 {
@@ -130,7 +131,7 @@ namespace RougeLike.Dungeon
             {
                 Random money = new Random();
                 Random experience = new Random();
-                Item item = itemService.GetRandomItem();
+                Item item = itemService.GetRandomItem(characterService.GetHeroLevel(), characterService.GetHeroClass());
 
                 int heroLevel = characterService.GetHeroLevel();
 

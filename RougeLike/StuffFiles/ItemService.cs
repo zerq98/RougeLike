@@ -1,4 +1,5 @@
 ﻿using RougeLike.Helpers;
+using RougeLike.PlayerFiles;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,11 +16,19 @@ namespace RougeLike.StuffFiles
             Initialize();
         }
 
-        public Item GetRandomItem()
+        public Item GetRandomItem(int level, Class classType)
         {
             Random random = new Random();
-
-            int id = random.Next(0, items.Count);
+            bool isGoodItem = false;
+            int id = 0;
+            while (!isGoodItem)
+            {
+                id = random.Next(0, items.Count);
+                if (items[id].MinLevel <= level && items[id].CompatibiltyClass == classType)
+                {
+                    isGoodItem = true;
+                }
+            }
 
             return items[id];
         }
@@ -49,6 +58,30 @@ namespace RougeLike.StuffFiles
             FileStream writer = File.Create(HelperVariables.itemsBase);
             serializer.Serialize(writer, items);
             writer.Close();
+        }
+
+        public List<Item> GetShopStuff(int level, Class classType)
+        {
+            List<Item> selected = new List<Item>();
+
+            Random random = new Random();
+
+            for (int i = 0; i < 6; i++)
+            {
+                bool isGoodItem = false;
+                while (!isGoodItem)
+                {
+                    Item selectedItem = items[random.Next(0, items.Count)];
+
+                    if (selectedItem.MinLevel <= level && selectedItem.CompatibiltyClass == classType)
+                    {
+                        isGoodItem = true;
+                        selected.Add(selectedItem);
+                    }
+                }
+            }
+
+            return selected;
         }
     }
 }
