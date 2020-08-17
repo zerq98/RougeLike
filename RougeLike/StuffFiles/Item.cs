@@ -1,4 +1,6 @@
-﻿namespace RougeLike.StuffFiles
+﻿using RougeLike.PlayerFiles;
+
+namespace RougeLike.StuffFiles
 {
     public class Item
     {
@@ -11,5 +13,11 @@
         public string HeroStatToChange { get; set; }
 
         public int Value { get; set; }
+
+        public int Cost { get; set; }
+
+        public Class CompatibiltyClass { get; set; }
+
+        public int MinLevel { get; set; }
     }
 }

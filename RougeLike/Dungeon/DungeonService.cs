@@ -1,19 +1,24 @@
-﻿using RougeLike.Menu;
+﻿using RougeLike.Helpers;
+using RougeLike.Menu;
 using RougeLike.PlayerFiles;
+using RougeLike.StuffFiles;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace RougeLike.Dungeon
 {
     public class DungeonService
     {
         private CharacterService _characterService;
+        private ItemService _itemService;
         private int heroLevel;
         private int monstersCount;
 
-        public DungeonService(CharacterService characterService)
+        public DungeonService(CharacterService characterService, ItemService itemService)
         {
             _characterService = characterService;
+            _itemService = itemService;
             heroLevel = _characterService.GetHeroLevel();
             monstersCount = heroLevel + 2 * heroLevel;
         }
@@ -39,12 +44,13 @@ namespace RougeLike.Dungeon
 
         public void NextFight(MenuActionService actionService)
         {
-            _characterService = Fight.FightMenu(actionService, _characterService);
+            _characterService = Fight.FightMenu(actionService, _characterService, _itemService);
 
             if (_characterService == null)
             {
                 Console.Clear();
                 Console.WriteLine("Sorry you lost :( . Try again!");
+                File.Delete(HelperVariables.saveFile);
                 Environment.Exit(1);
             }
         }

@@ -57,17 +57,7 @@ namespace RougeLike
                         break;
 
                     case 2:
-                        if (_characterService.LoadCharacter())
-                        {
-                            isUserInStart = false;
-                        }
-                        else
-                        {
-                            Console.Clear();
-                            Console.WriteLine("Something went wrong!");
-                            Console.WriteLine("Click enter to continue");
-                            Console.Clear();
-                        }
+                        isUserInStart = Messages.LoadResult(_characterService.LoadCharacter());
                         break;
 
                     case 3:
@@ -88,13 +78,11 @@ namespace RougeLike
                         break;
 
                     case 4:
-                        Console.Clear();
-                        Console.WriteLine("OK so BYE!!!");
-                        System.Environment.Exit(1);
+                        Messages.Exit();
                         break;
 
                     default:
-                        Console.WriteLine("Option you selected doesn't exist");
+                        Messages.WrongOption();
                         break;
                 }
             }

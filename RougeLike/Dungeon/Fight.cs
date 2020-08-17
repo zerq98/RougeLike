@@ -1,6 +1,8 @@
 ﻿using RougeLike.Enemies;
+using RougeLike.Helpers;
 using RougeLike.Menu;
 using RougeLike.PlayerFiles;
+using RougeLike.StuffFiles;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +10,7 @@ namespace RougeLike.Dungeon
 {
     public static class Fight
     {
-        public static CharacterService FightMenu(MenuActionService actionService, CharacterService characterService)
+        public static CharacterService FightMenu(MenuActionService actionService, CharacterService characterService, ItemService itemService)
         {
             bool isMonsterLive = true;
             bool isHeroLive = true;
@@ -65,6 +67,41 @@ namespace RougeLike.Dungeon
                         break;
 
                     case 2:
+                        int selectedItem;
+                        do
+                        {
+                            List<Item> heroItems = characterService.GetItems();
+                            Console.Clear();
+                            int counter = 1;
+                            Console.WriteLine("Your inventory:");
+                            foreach (var item in heroItems)
+                            {
+                                Console.WriteLine($"{counter}. {item.Name}");
+                                counter++;
+                            }
+                            Console.WriteLine("0. Exit");
+                            int.TryParse(Console.ReadKey().KeyChar.ToString(), out selectedItem);
+
+                            Console.Clear();
+                            if (selectedItem != 0 && selectedItem - 1 < heroItems.Count)
+                            {
+                                if (heroItems[selectedItem - 1].IsUsable)
+                                {
+                                    characterService.UseItem(selectedItem - 1);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("This item is not usable");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("You have chosen wrong number");
+                            }
+
+                            Console.Read();
+                            Console.Clear();
+                        } while (selectedItem != 0);
                         break;
 
                     case 3:
@@ -94,11 +131,24 @@ namespace RougeLike.Dungeon
             {
                 Random money = new Random();
                 Random experience = new Random();
+                Item item = itemService.GetRandomItem(characterService.GetHeroLevel(), characterService.GetHeroClass());
 
                 int heroLevel = characterService.GetHeroLevel();
 
                 int gainedMoney = money.Next(25 * heroLevel, 150 * heroLevel);
                 int gainedExp = experience.Next(10 * heroLevel, 200 * heroLevel);
+
+                Console.Clear();
+
+                if (!characterService.CheckIsInventoryFull())
+                {
+                    int numberOfItems = characterService.AddItemToInventory(item);
+                    Console.WriteLine($"You got item: {item.Name}");
+                    Console.WriteLine($"You have {numberOfItems} items in your inventory");
+                }
+
+                Messages.AfterFight(gainedExp, gainedMoney);
+
                 characterService.UpdateCharacterAfterFight(gainedMoney, gainedExp);
             }
 
@@ -124,14 +174,14 @@ namespace RougeLike.Dungeon
                 chance = 25;
             }
 
-            bool isSuccessfullEscape = false;
+            bool isSuccessfulEscape = false;
 
             if (escapeCounter.Next(0, 100) >= (100 - chance))
             {
-                isSuccessfullEscape = true;
+                isSuccessfulEscape = true;
             }
 
-            return isSuccessfullEscape;
+            return isSuccessfulEscape;
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using RougeLike.Helpers;
 using RougeLike.Menu;
+using RougeLike.StuffFiles;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 
 namespace RougeLike.PlayerFiles
 {
@@ -38,9 +39,8 @@ namespace RougeLike.PlayerFiles
         {
             Console.WriteLine();
             Console.WriteLine($"Select name for your {selectedClass}");
-            var name = Console.ReadLine();
 
-            character.Name = name;
+            character.Name = Console.ReadLine();
             character.Class = selectedClass;
             character.Money = 0;
             character.NeededExperience = 500;
@@ -70,7 +70,7 @@ namespace RougeLike.PlayerFiles
                     character.Health = 450;
                     character.MaxHealth = 450;
                     character.AttackDamage = 25;
-                    character.Armor = 45;
+                    character.Armor = 35;
                     character.AttackSpeed = 10;
                     break;
 
@@ -94,12 +94,7 @@ namespace RougeLike.PlayerFiles
         {
             try
             {
-                System.Xml.Serialization.XmlSerializer reader =
-                new System.Xml.Serialization.XmlSerializer(typeof(Character));
-
-                StreamReader streamReader = new StreamReader(HelperVariables.saveFile);
-                character = (Character)reader.Deserialize(streamReader);
-                streamReader.Close();
+                character = SaveManager.Load();
                 return true;
             }
             catch
@@ -112,12 +107,7 @@ namespace RougeLike.PlayerFiles
         {
             try
             {
-                System.Xml.Serialization.XmlSerializer writer =
-                new System.Xml.Serialization.XmlSerializer(typeof(Character));
-
-                FileStream file = System.IO.File.Create(HelperVariables.saveFile);
-                writer.Serialize(file, character);
-                file.Close();
+                SaveManager.Save(character);
                 return true;
             }
             catch
@@ -131,7 +121,7 @@ namespace RougeLike.PlayerFiles
             return character.Name;
         }
 
-        public int CharacterInfo(MenuActionService actionService)
+        public int CharacterInfo()
         {
             Console.Clear();
             Console.WriteLine("Your character:");
@@ -156,6 +146,11 @@ namespace RougeLike.PlayerFiles
         public int GetHeroLevel()
         {
             return character.Level;
+        }
+
+        public Class GetHeroClass()
+        {
+            return character.Class;
         }
 
         public void ShowHeroInfoInFight()
@@ -202,10 +197,15 @@ namespace RougeLike.PlayerFiles
                 character.Experience -= character.NeededExperience;
                 character.NeededExperience += 500 * (character.Level - 1);
                 character.MaxHealth += 200;
-                character.Armor += 15;
+                character.Armor += 10;
                 character.AttackDamage += 15;
                 character.AttackSpeed += 15;
             }
+        }
+
+        public int GetMoneyCount()
+        {
+            return character.Money;
         }
 
         public void Heal()
@@ -215,12 +215,106 @@ namespace RougeLike.PlayerFiles
 
         public bool Heal(int cost)
         {
-            if(cost <= character.Money)
+            if (cost <= character.Money)
             {
                 character.Health = character.MaxHealth;
                 return true;
             }
             return false;
+        }
+
+        public List<Item> GetItems()
+        {
+            return character.Inventory.Items.ToList();
+        }
+
+        public void UseItem(int itemId)
+        {
+            character.Health += character.Inventory.Items[itemId].Value;
+            character.Inventory.Items.RemoveAt(itemId);
+        }
+
+        public bool CheckIsInventoryFull()
+        {
+            return (character.Inventory.Items.Count == character.Inventory.Capacity);
+        }
+
+        public int AddItemToInventory(Item item)
+        {
+            character.Inventory.Items.Add(item);
+
+            if (!item.IsUsable)
+            {
+                switch (item.HeroStatToChange)
+                {
+                    case "Attack Damage":
+                        character.AttackDamage += item.Value;
+                        break;
+
+                    case "Attack Speed":
+                        character.AttackSpeed += item.Value;
+                        break;
+
+                    case "Armor":
+                        character.Armor += item.Value;
+                        break;
+
+                    case "Health":
+                        character.Health += item.Value;
+                        break;
+                }
+            }
+
+            return character.Inventory.Items.Count;
+        }
+
+        public int SellItem(int id)
+        {
+            Item item = character.Inventory.Items[id];
+
+            if (!item.IsUsable)
+            {
+                switch (item.HeroStatToChange)
+                {
+                    case "Attack Damage":
+                        character.AttackDamage -= item.Value;
+                        break;
+
+                    case "Attack Speed":
+                        character.AttackSpeed -= item.Value;
+                        break;
+
+                    case "Armor":
+                        character.Armor -= item.Value;
+                        break;
+
+                    case "Health":
+                        character.Health -= item.Value;
+                        break;
+                }
+            }
+
+            character.Money += (item.Cost / 2);
+
+            character.Inventory.Items.Remove(item);
+
+            return character.Money;
+        }
+
+        public bool CanBuy(int cost)
+        {
+            if (!CheckIsInventoryFull() && character.Money >= cost)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void BuyItem(Item item)
+        {
+            character.Money -= item.Cost;
+            AddItemToInventory(item);
         }
     }
 }
