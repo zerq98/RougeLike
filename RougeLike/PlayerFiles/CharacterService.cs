@@ -1,8 +1,9 @@
 ﻿using RougeLike.Helpers;
 using RougeLike.Menu;
+using RougeLike.StuffFiles;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 
 namespace RougeLike.PlayerFiles
 {
@@ -38,9 +39,8 @@ namespace RougeLike.PlayerFiles
         {
             Console.WriteLine();
             Console.WriteLine($"Select name for your {selectedClass}");
-            var name = Console.ReadLine();
 
-            character.Name = name;
+            character.Name = Console.ReadLine();
             character.Class = selectedClass;
             character.Money = 0;
             character.NeededExperience = 500;
@@ -94,12 +94,7 @@ namespace RougeLike.PlayerFiles
         {
             try
             {
-                System.Xml.Serialization.XmlSerializer reader =
-                new System.Xml.Serialization.XmlSerializer(typeof(Character));
-
-                StreamReader streamReader = new StreamReader(HelperVariables.saveFile);
-                character = (Character)reader.Deserialize(streamReader);
-                streamReader.Close();
+                character = SaveManager.Load();
                 return true;
             }
             catch
@@ -112,12 +107,7 @@ namespace RougeLike.PlayerFiles
         {
             try
             {
-                System.Xml.Serialization.XmlSerializer writer =
-                new System.Xml.Serialization.XmlSerializer(typeof(Character));
-
-                FileStream file = System.IO.File.Create(HelperVariables.saveFile);
-                writer.Serialize(file, character);
-                file.Close();
+                SaveManager.Save(character);
                 return true;
             }
             catch
@@ -131,7 +121,7 @@ namespace RougeLike.PlayerFiles
             return character.Name;
         }
 
-        public int CharacterInfo(MenuActionService actionService)
+        public int CharacterInfo()
         {
             Console.Clear();
             Console.WriteLine("Your character:");
@@ -215,12 +205,35 @@ namespace RougeLike.PlayerFiles
 
         public bool Heal(int cost)
         {
-            if(cost <= character.Money)
+            if (cost <= character.Money)
             {
                 character.Health = character.MaxHealth;
                 return true;
             }
             return false;
+        }
+
+        public List<Item> GetItems()
+        {
+            return character.Inventory.Items.ToList();
+        }
+
+        public void UseItem(int itemId)
+        {
+            character.Health += character.Inventory.Items[itemId].Value;
+            character.Inventory.Items.RemoveAt(itemId);
+        }
+
+        public bool CheckIsInventoryFull()
+        {
+            return (character.Inventory.Items.Count == character.Inventory.Capacity);
+        }
+
+        public int AddItemToInventory(Item item)
+        {
+            character.Inventory.Items.Add(item);
+
+            return character.Inventory.Items.Count;
         }
     }
 }
