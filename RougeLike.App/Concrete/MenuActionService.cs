@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using RougeLike.App.Abstract;
+using RougeLike.Domain.Entity;
+using System.Collections.Generic;
 
-namespace RougeLike.Menu
+namespace RougeLike.App.Concrete
 {
-    public class MenuActionService
+    public class MenuActionService : IMenuActionService
     {
         private List<MenuAction> menuActions;
 
@@ -26,9 +28,9 @@ namespace RougeLike.Menu
             return selectedActions;
         }
 
-        public void AddNewAction(int id, string name, string menuName)
+        public void AddNewAction(MenuAction action)
         {
-            menuActions.Add(new MenuAction { Id = id, Name = name, MenuName = menuName });
+            menuActions.Add(action);
         }
     }
 }

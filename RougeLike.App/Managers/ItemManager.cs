@@ -1,45 +1,53 @@
-﻿using RougeLike.Helpers;
-using RougeLike.PlayerFiles;
+﻿using RougeLike.App.Abstract;
+using RougeLike.App.Common;
+using RougeLike.App.Concrete;
+using RougeLike.Domain.Common;
+using RougeLike.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace RougeLike.StuffFiles
+namespace RougeLike.App.Managers
 {
-    public class ItemService
+    public class ItemManager
     {
-        private List<Item> items;
+        private readonly IItemService _itemService;
 
-        public ItemService()
+        public ItemManager()
         {
+            _itemService = new ItemService();
             Initialize();
         }
 
         public Item GetRandomItem(int level, Class classType)
         {
             Random random = new Random();
+            Item item = null;
             bool isGoodItem = false;
             int id = 0;
             while (!isGoodItem)
             {
-                id = random.Next(0, items.Count);
-                if (items[id].MinLevel <= level && items[id].CompatibiltyClass == classType)
+                id = random.Next(0, _itemService.GetCount());
+                item = _itemService.GetItem(id);
+                if (item.MinLevel <= level && item.CompatibiltyClass == classType)
                 {
                     isGoodItem = true;
                 }
             }
 
-            return items[id];
+            return item;
         }
 
         private void Initialize()
         {
-            if (File.Exists(HelperVariables.itemsBase))
+            List<Item> items = new List<Item>();
+
+            if (File.Exists(ItemsInitializer.itemsBase))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(List<Item>));
 
-                StreamReader reader = new StreamReader(HelperVariables.itemsBase);
+                StreamReader reader = new StreamReader(ItemsInitializer.itemsBase);
 
                 items = (List<Item>)serializer.Deserialize(reader);
                 reader.Close();
@@ -49,19 +57,22 @@ namespace RougeLike.StuffFiles
                 items = ItemsInitializer.Initialize();
                 Save();
             }
+
+            _itemService.SetList(items);
         }
 
         private void Save()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(List<Item>));
 
-            FileStream writer = File.Create(HelperVariables.itemsBase);
-            serializer.Serialize(writer, items);
+            FileStream writer = File.Create(ItemsInitializer.itemsBase);
+            serializer.Serialize(writer, _itemService.GetAll());
             writer.Close();
         }
 
         public List<Item> GetShopStuff(int level, Class classType)
         {
+            List<Item> items = _itemService.GetAll();
             List<Item> selected = new List<Item>();
 
             Random random = new Random();

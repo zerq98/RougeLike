@@ -1,25 +1,24 @@
-﻿using RougeLike.Helpers;
-using RougeLike.Menu;
-using RougeLike.PlayerFiles;
-using RougeLike.StuffFiles;
+﻿using RougeLike.App.Common;
+using RougeLike.App.Concrete;
+using RougeLike.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace RougeLike.Dungeon
+namespace RougeLike.App.Managers
 {
-    public class DungeonService
+    public class DungeonManager
     {
-        private CharacterService _characterService;
-        private ItemService _itemService;
+        private CharacterManager _characterManager;
+        private ItemManager _itemManager;
         private int heroLevel;
         private int monstersCount;
 
-        public DungeonService(CharacterService characterService, ItemService itemService)
+        public DungeonManager(CharacterManager characterManager, ItemManager itemManager)
         {
-            _characterService = characterService;
-            _itemService = itemService;
-            heroLevel = _characterService.GetHeroLevel();
+            _characterManager = characterManager;
+            _itemManager = itemManager;
+            heroLevel = _characterManager.GetHeroLevel();
             monstersCount = heroLevel + 2 * heroLevel;
         }
 
@@ -44,21 +43,21 @@ namespace RougeLike.Dungeon
 
         public void NextFight(MenuActionService actionService)
         {
-            _characterService = Fight.FightMenu(actionService, _characterService, _itemService);
+            _characterManager = Fight.FightMenu(actionService, _characterManager, _itemManager);
 
-            if (_characterService == null)
+            if (_characterManager == null)
             {
                 Console.Clear();
                 Console.WriteLine("Sorry you lost :( . Try again!");
-                File.Delete(HelperVariables.saveFile);
+                File.Delete(SaveManager.saveFile);
                 Environment.Exit(1);
             }
         }
 
-        public CharacterService ExitMenu()
+        public CharacterManager ExitMenu()
         {
-            _characterService.Heal();
-            return _characterService;
+            _characterManager.Heal();
+            return _characterManager;
         }
 
         public bool CheckCount()

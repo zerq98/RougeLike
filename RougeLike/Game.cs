@@ -1,23 +1,21 @@
-﻿using RougeLike.Dungeon;
-using RougeLike.Helpers;
-using RougeLike.Menu;
-using RougeLike.PlayerFiles;
-using RougeLike.StuffFiles;
+﻿using RougeLike.App.Common;
+using RougeLike.App.Concrete;
+using RougeLike.App.Managers;
 using System;
 
 namespace RougeLike
 {
     public class Game
     {
-        private CharacterService _characterService;
+        private CharacterManager _characterManager;
         private readonly MenuActionService _actionService;
-        private ItemService _itemService;
+        private ItemManager _itemManager;
 
-        public Game(CharacterService characterService, MenuActionService actionService)
+        public Game(CharacterManager characterManager, MenuActionService actionService)
         {
-            _characterService = characterService;
+            _characterManager = characterManager;
             _actionService = actionService;
-            _itemService = new ItemService();
+            _itemManager = new ItemManager();
         }
 
         public void GameMenu()
@@ -25,7 +23,7 @@ namespace RougeLike
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine($"What do you want to do {_characterService.GetCharacterName()}");
+                Console.WriteLine($"What do you want to do {_characterManager.GetCharacterName()}");
 
                 foreach (var action in _actionService.GetMenuActionsByMenuName("Game Menu"))
                 {
@@ -41,7 +39,7 @@ namespace RougeLike
                 switch (chosenOption)
                 {
                     case 1:
-                        DungeonService dungeonService = new DungeonService(_characterService, _itemService);
+                        DungeonManager dungeonService = new DungeonManager(_characterManager, _itemManager);
                         int selectedOption = 0;
                         bool isDungeonFinished = false;
                         do
@@ -59,18 +57,18 @@ namespace RougeLike
                                     else
                                     {
                                         isDungeonFinished = true;
-                                        _characterService = dungeonService.ExitMenu();
+                                        _characterManager = dungeonService.ExitMenu();
                                     }
                                     break;
 
                                 case 2:
                                     Console.Clear();
-                                    int cost = 250 * _characterService.GetHeroLevel();
+                                    int cost = 250 * _characterManager.GetHeroLevel();
                                     Console.WriteLine($"Do you want to heal your hero for {cost} gold? (y/n)");
                                     var confirmHeal = Console.ReadLine();
                                     if (confirmHeal == "y" || confirmHeal == "Y")
                                     {
-                                        if (_characterService.Heal(cost))
+                                        if (_characterManager.Heal(cost))
                                         {
                                             Console.WriteLine("Your hero was fully healed!");
                                         }
@@ -83,26 +81,26 @@ namespace RougeLike
 
                                 case 3:
                                     isDungeonFinished = true;
-                                    _characterService = dungeonService.ExitMenu();
+                                    _characterManager = dungeonService.ExitMenu();
                                     break;
                             }
                         } while (!isDungeonFinished);
 
-                        _characterService.SaveCharacter();
+                        _characterManager.SaveCharacter();
                         break;
 
                     case 2:
-                        ShopService shop = new ShopService(_itemService, _characterService);
+                        ShopManager shop = new ShopManager(_itemManager, _characterManager);
                         shop.ShowMenu();
                         break;
 
                     case 3:
                         Console.Clear();
-                        int i = _characterService.CharacterInfo();
+                        int i = _characterManager.CharacterInfo();
                         break;
 
                     case 4:
-                        Messages.SaveResult(_characterService.SaveCharacter());
+                        Messages.SaveResult(_characterManager.SaveCharacter());
                         break;
 
                     case 5:

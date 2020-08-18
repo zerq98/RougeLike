@@ -1,31 +1,30 @@
-﻿using RougeLike.Enemies;
-using RougeLike.Helpers;
-using RougeLike.Menu;
-using RougeLike.PlayerFiles;
-using RougeLike.StuffFiles;
+﻿using RougeLike.App.Abstract;
+using RougeLike.App.Concrete;
+using RougeLike.App.Managers;
+using RougeLike.Domain.Entity;
 using System;
 using System.Collections.Generic;
 
-namespace RougeLike.Dungeon
+namespace RougeLike.App.Common
 {
     public static class Fight
     {
-        public static CharacterService FightMenu(MenuActionService actionService, CharacterService characterService, ItemService itemService)
+        public static CharacterManager FightMenu(MenuActionService actionService, CharacterManager characterManager, ItemManager itemManager)
         {
             bool isMonsterLive = true;
             bool isHeroLive = true;
             bool isEscaped = false;
-            EnemyService enemyService = new EnemyService();
-            enemyService.GenerateNewEnemy(characterService.GetHeroLevel());
+            IEnemyService enemyService = new EnemyService();
+            enemyService.GenerateNewEnemy(characterManager.GetHeroLevel());
 
-            int[] hiddenHeroStats = characterService.GetHiddenStats();
+            int[] hiddenHeroStats = characterManager.GetHiddenStats();
             int[] hiddenEnemyStats = enemyService.GetHiddenStats();
 
             do
             {
                 Console.Clear();
                 Console.WriteLine("Your hero:");
-                characterService.ShowHeroInfoInFight();
+                characterManager.ShowHeroInfoInFight();
                 Console.WriteLine();
                 enemyService.ShowMonsterInfo();
 
@@ -51,12 +50,12 @@ namespace RougeLike.Dungeon
                             Console.Read();
                             if (isMonsterLive)
                             {
-                                isHeroLive = characterService.GetDamage(hiddenEnemyStats[0]);
+                                isHeroLive = characterManager.GetDamage(hiddenEnemyStats[0]);
                             }
                         }
                         else
                         {
-                            isHeroLive = characterService.GetDamage(hiddenEnemyStats[0]);
+                            isHeroLive = characterManager.GetDamage(hiddenEnemyStats[0]);
                             Console.Read();
                             if (isHeroLive)
                             {
@@ -70,7 +69,7 @@ namespace RougeLike.Dungeon
                         int selectedItem;
                         do
                         {
-                            List<Item> heroItems = characterService.GetItems();
+                            List<Item> heroItems = characterManager.GetItems();
                             Console.Clear();
                             int counter = 1;
                             Console.WriteLine("Your inventory:");
@@ -87,7 +86,7 @@ namespace RougeLike.Dungeon
                             {
                                 if (heroItems[selectedItem - 1].IsUsable)
                                 {
-                                    characterService.UseItem(selectedItem - 1);
+                                    characterManager.UseItem(selectedItem - 1);
                                 }
                                 else
                                 {
@@ -112,7 +111,7 @@ namespace RougeLike.Dungeon
                             Console.WriteLine("Ups your enemy was too quick!");
                             Console.WriteLine("Click enter to continue...");
                             Console.Read();
-                            isHeroLive = characterService.GetDamage(hiddenEnemyStats[0]);
+                            isHeroLive = characterManager.GetDamage(hiddenEnemyStats[0]);
                         }
                         break;
 
@@ -131,28 +130,28 @@ namespace RougeLike.Dungeon
             {
                 Random money = new Random();
                 Random experience = new Random();
-                Item item = itemService.GetRandomItem(characterService.GetHeroLevel(), characterService.GetHeroClass());
+                Item item = itemManager.GetRandomItem(characterManager.GetHeroLevel(), characterManager.GetHeroClass());
 
-                int heroLevel = characterService.GetHeroLevel();
+                int heroLevel = characterManager.GetHeroLevel();
 
                 int gainedMoney = money.Next(25 * heroLevel, 150 * heroLevel);
                 int gainedExp = experience.Next(10 * heroLevel, 200 * heroLevel);
 
                 Console.Clear();
 
-                if (!characterService.CheckIsInventoryFull())
+                if (!characterManager.CheckIsInventoryFull())
                 {
-                    int numberOfItems = characterService.AddItemToInventory(item);
+                    int numberOfItems = characterManager.AddItemToInventory(item);
                     Console.WriteLine($"You got item: {item.Name}");
                     Console.WriteLine($"You have {numberOfItems} items in your inventory");
                 }
 
                 Messages.AfterFight(gainedExp, gainedMoney);
 
-                characterService.UpdateCharacterAfterFight(gainedMoney, gainedExp);
+                characterManager.UpdateCharacterAfterFight(gainedMoney, gainedExp);
             }
 
-            return characterService;
+            return characterManager;
         }
 
         private static bool TryToEscape(int heroSpeed, int monsterSpeed)

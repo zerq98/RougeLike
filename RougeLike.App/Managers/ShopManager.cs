@@ -1,25 +1,25 @@
-﻿using RougeLike.Helpers;
-using RougeLike.PlayerFiles;
+﻿using RougeLike.App.Common;
+using RougeLike.Domain.Entity;
 using System;
 using System.Collections.Generic;
 
-namespace RougeLike.StuffFiles
+namespace RougeLike.App.Managers
 {
-    public class ShopService
+    public class ShopManager
     {
-        private readonly ItemService _itemService;
-        private readonly CharacterService _characterService;
+        private readonly ItemManager _itemManager;
+        private readonly CharacterManager _characterManager;
 
-        public ShopService(ItemService itemService, CharacterService characterService)
+        public ShopManager(ItemManager itemManager, CharacterManager characterManager)
         {
-            _itemService = itemService;
-            _characterService = characterService;
+            _itemManager = itemManager;
+            _characterManager = characterManager;
         }
 
-        public CharacterService ShowMenu()
+        public CharacterManager ShowMenu()
         {
             bool exit = false;
-            List<Item> items = _itemService.GetShopStuff(_characterService.GetHeroLevel(), _characterService.GetHeroClass());
+            List<Item> items = _itemManager.GetShopStuff(_characterManager.GetHeroLevel(), _characterManager.GetHeroClass());
 
             do
             {
@@ -36,7 +36,7 @@ namespace RougeLike.StuffFiles
                 Console.WriteLine("7. Sell");
                 Console.WriteLine("0. Exit");
                 Console.WriteLine();
-                Console.WriteLine($"Your gold: {_characterService.GetMoneyCount()}");
+                Console.WriteLine($"Your gold: {_characterManager.GetMoneyCount()}");
                 int option;
                 int.TryParse(Console.ReadKey().KeyChar.ToString(), out option);
                 switch (option)
@@ -49,9 +49,9 @@ namespace RougeLike.StuffFiles
                     case 6:
                         if (items.Count >= option - 1)
                         {
-                            if (_characterService.CanBuy(items[option - 1].Cost))
+                            if (_characterManager.CanBuy(items[option - 1].Cost))
                             {
-                                _characterService.BuyItem(items[option - 1]);
+                                _characterManager.BuyItem(items[option - 1]);
                                 items.RemoveAt(option - 1);
                             }
                         }
@@ -61,7 +61,7 @@ namespace RougeLike.StuffFiles
                         int selectedItem;
                         do
                         {
-                            List<Item> heroItems = _characterService.GetItems();
+                            List<Item> heroItems = _characterManager.GetItems();
                             Console.Clear();
                             counter = 1;
                             Console.WriteLine("Your inventory:");
@@ -76,7 +76,7 @@ namespace RougeLike.StuffFiles
                             Console.Clear();
                             if (selectedItem != 0 && selectedItem <= heroItems.Count)
                             {
-                                _characterService.SellItem(selectedItem - 1);
+                                _characterManager.SellItem(selectedItem - 1);
                             }
 
                             Console.Read();
@@ -94,7 +94,7 @@ namespace RougeLike.StuffFiles
                 }
             } while (!exit);
 
-            return _characterService;
+            return _characterManager;
         }
     }
 }

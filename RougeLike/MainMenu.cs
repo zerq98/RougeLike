@@ -1,6 +1,6 @@
-﻿using RougeLike.Helpers;
-using RougeLike.Menu;
-using RougeLike.PlayerFiles;
+﻿using RougeLike.App.Common;
+using RougeLike.App.Concrete;
+using RougeLike.App.Managers;
 using System;
 using System.IO;
 
@@ -9,12 +9,12 @@ namespace RougeLike
     public class MainMenu
     {
         private readonly MenuActionService _actionService;
-        private readonly CharacterService _characterService;
+        private readonly CharacterManager _characterManager;
 
         public MainMenu(MenuActionService actionService)
         {
             _actionService = actionService;
-            _characterService = new CharacterService();
+            _characterManager = new CharacterManager();
         }
 
         public void MenuView()
@@ -39,8 +39,8 @@ namespace RougeLike
                 switch (chosenOption)
                 {
                     case 1:
-                        var selectedClass = _characterService.CreateCharacterView(_actionService);
-                        if (_characterService.CreateCharacter(selectedClass))
+                        var selectedClass = _characterManager.CreateCharacterView(_actionService);
+                        if (_characterManager.CreateCharacter(selectedClass))
                         {
                             isUserInStart = false;
                         }
@@ -57,13 +57,13 @@ namespace RougeLike
                         break;
 
                     case 2:
-                        isUserInStart = Messages.LoadResult(_characterService.LoadCharacter());
+                        isUserInStart = Messages.LoadResult(_characterManager.LoadCharacter());
                         break;
 
                     case 3:
-                        if (File.Exists(HelperVariables.saveFile))
+                        if (File.Exists(SaveManager.saveFile))
                         {
-                            File.Delete(HelperVariables.saveFile);
+                            File.Delete(SaveManager.saveFile);
                         }
                         else
                         {
@@ -89,7 +89,7 @@ namespace RougeLike
 
             Console.Clear();
 
-            Game gameMenu = new Game(_characterService, _actionService);
+            Game gameMenu = new Game(_characterManager, _actionService);
             gameMenu.GameMenu();
         }
     }

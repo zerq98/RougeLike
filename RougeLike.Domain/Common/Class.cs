@@ -1,4 +1,4 @@
-﻿namespace RougeLike.PlayerFiles
+﻿namespace RougeLike.Domain.Common
 {
     public enum Class
     {

@@ -1,6 +1,8 @@
-﻿namespace RougeLike.PlayerFiles
+﻿using RougeLike.Domain.Common;
+
+namespace RougeLike.Domain.Entity
 {
-    public class Character
+    public class Character : BaseCreatureEntity
     {
         public string Name { get; set; }
 
@@ -14,15 +16,7 @@
 
         public int Money { get; set; }
 
-        public int Health { get; set; }
-
         public int MaxHealth { get; set; }
-
-        public int AttackDamage { get; set; }
-
-        public int Armor { get; set; }
-
-        public int AttackSpeed { get; set; }
 
         public Inventory Inventory { get; set; }
     }

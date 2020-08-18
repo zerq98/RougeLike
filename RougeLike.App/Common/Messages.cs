@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RougeLike.Helpers
+namespace RougeLike.App.Common
 {
     public static class Messages
     {

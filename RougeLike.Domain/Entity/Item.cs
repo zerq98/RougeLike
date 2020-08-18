@@ -1,13 +1,9 @@
-﻿using RougeLike.PlayerFiles;
+﻿using RougeLike.Domain.Common;
 
-namespace RougeLike.StuffFiles
+namespace RougeLike.Domain.Entity
 {
-    public class Item
+    public class Item : BaseEntity
     {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
         public bool IsUsable { get; set; }
 
         public string HeroStatToChange { get; set; }

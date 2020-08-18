@@ -1,8 +1,11 @@
-﻿using System;
+﻿using RougeLike.App.Abstract;
+using RougeLike.Domain.Common;
+using RougeLike.Domain.Entity;
+using System;
 
-namespace RougeLike.Enemies
+namespace RougeLike.App.Concrete
 {
-    public class EnemyService
+    public class EnemyService : IEnemyService
     {
         private Enemy enemy;
         private Random random;

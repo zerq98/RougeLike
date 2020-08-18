@@ -1,11 +1,7 @@
-﻿namespace RougeLike.Enemies
+﻿namespace RougeLike.Domain.Common
 {
-    public class Enemy
+    public class BaseCreatureEntity
     {
-        public EnemyRace Race { get; set; }
-
-        public EnemyType Type { get; set; }
-
         public int Health { get; set; }
 
         public int AttackDamage { get; set; }

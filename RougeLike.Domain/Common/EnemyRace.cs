@@ -1,4 +1,4 @@
-﻿namespace RougeLike.Enemies
+﻿namespace RougeLike.Domain.Common
 {
     public enum EnemyRace
     {

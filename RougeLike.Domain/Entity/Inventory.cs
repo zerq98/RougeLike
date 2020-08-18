@@ -1,7 +1,6 @@
-﻿using RougeLike.StuffFiles;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace RougeLike.PlayerFiles
+namespace RougeLike.Domain.Entity
 {
     public class Inventory
     {
