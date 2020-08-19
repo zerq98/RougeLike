@@ -14,10 +14,9 @@ namespace RougeLike.App.Managers
     {
         private readonly IItemService _itemService;
 
-        public ItemManager()
+        public ItemManager(IItemService itemService)
         {
-            _itemService = new ItemService();
-            Initialize();
+            _itemService = itemService;
         }
 
         public Item GetRandomItem(int level, Class classType)
@@ -39,7 +38,7 @@ namespace RougeLike.App.Managers
             return item;
         }
 
-        private void Initialize()
+        public void Initialize()
         {
             List<Item> items = new List<Item>();
 

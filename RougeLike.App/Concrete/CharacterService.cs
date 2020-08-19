@@ -15,12 +15,9 @@ namespace RougeLike.App.Concrete
             character = new Character();
         }
 
-        public bool CreateCharacter(Class selectedClass)
+        public bool CreateCharacter(Class selectedClass, string name)
         {
-            Console.WriteLine();
-            Console.WriteLine($"Select name for your {selectedClass}");
-
-            character.Name = Console.ReadLine();
+            character.Name = name;
             character.Class = selectedClass;
             character.Money = 0;
             character.NeededExperience = 500;

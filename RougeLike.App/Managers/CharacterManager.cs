@@ -12,9 +12,9 @@ namespace RougeLike.App.Managers
         private readonly ICharacterService _characterService;
         private Character characterUpdateModel;
 
-        public CharacterManager()
+        public CharacterManager(ICharacterService characterService)
         {
-            _characterService = new CharacterService();
+            _characterService = characterService;
         }
 
         public Class CreateCharacterView(MenuActionService actionService)
@@ -36,9 +36,9 @@ namespace RougeLike.App.Managers
             return (Class)selectedClass;
         }
 
-        public bool CreateCharacter(Class selectedClass)
+        public bool CreateCharacter(Class selectedClass,string name)
         {
-            return _characterService.CreateCharacter(selectedClass);
+            return _characterService.CreateCharacter(selectedClass,name);
         }
 
         public bool LoadCharacter()

@@ -15,7 +15,8 @@ namespace RougeLike
         {
             _characterManager = characterManager;
             _actionService = actionService;
-            _itemManager = new ItemManager();
+            _itemManager = new ItemManager(new ItemService());
+            _itemManager.Initialize();
         }
 
         public void GameMenu()
