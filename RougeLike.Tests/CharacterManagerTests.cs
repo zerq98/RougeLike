@@ -1,20 +1,17 @@
 ﻿using FluentAssertions;
 using Moq;
 using RougeLike.App.Abstract;
-using RougeLike.App.Concrete;
 using RougeLike.App.Managers;
 using RougeLike.Domain.Common;
 using RougeLike.Domain.Entity;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace RougeLike.Tests
 {
     public class CharacterManagerTests
     {
-        Character character = new Character()
+        private Character character = new Character()
         {
             Name = "Test",
             Class = Class.warrior,
@@ -29,80 +26,6 @@ namespace RougeLike.Tests
             AttackSpeed = 1,
             Inventory = new Inventory() { Capacity = 1, Items = new List<Item>() }
         };
-
-        [Fact]
-        public void Should_Create_Warrior()
-        {
-            var manager = new CharacterManager(new CharacterService());
-
-            var result = manager.CreateCharacter(Class.warrior,"Test");
-
-            var createdClass = manager.GetHeroClass();
-
-            result.Should().BeTrue();
-            createdClass.Should().NotBeNull();
-            createdClass.Should().BeOfType(typeof(Class));
-            createdClass.Should().Be(Class.warrior);
-        }
-
-        [Fact]
-        public void Should_Create_Mage()
-        {
-            var manager = new CharacterManager(new CharacterService());
-
-            var result = manager.CreateCharacter(Class.mage, "Test");
-
-            var createdClass = manager.GetHeroClass();
-
-            result.Should().BeTrue();
-            createdClass.Should().NotBeNull();
-            createdClass.Should().BeOfType(typeof(Class));
-            createdClass.Should().Be(Class.mage);
-        }
-
-        [Fact]
-        public void Should_Create_Berserker()
-        {
-            var manager = new CharacterManager(new CharacterService());
-
-            var result = manager.CreateCharacter(Class.berserker, "Test");
-
-            var createdClass = manager.GetHeroClass();
-
-            result.Should().BeTrue();
-            createdClass.Should().NotBeNull();
-            createdClass.Should().BeOfType(typeof(Class));
-            createdClass.Should().Be(Class.berserker);
-        }
-
-        [Fact]
-        public void Should_Create_Thief()
-        {
-            var manager = new CharacterManager(new CharacterService());
-
-            var result = manager.CreateCharacter(Class.thief, "Test");
-
-            var createdClass = manager.GetHeroClass();
-
-            result.Should().BeTrue();
-            createdClass.Should().NotBeNull();
-            createdClass.Should().BeOfType(typeof(Class));
-            createdClass.Should().Be(Class.thief);
-        }
-
-        [Fact]
-        public void Should_Create_Empty_Hero()
-        {
-            var manager = new CharacterManager(new CharacterService());
-
-            var result = manager.CreateCharacter(Class.none, "Test");
-
-            var createdClass = manager.GetHeroClass();
-
-            result.Should().BeFalse();
-            createdClass.Should().NotBeNull();
-            createdClass.Should().Be(Class.none);
-        }
 
         [Fact]
         public void Should_Update_Hero()

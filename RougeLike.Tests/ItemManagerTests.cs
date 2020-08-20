@@ -11,7 +11,7 @@ namespace RougeLike.Tests
 {
     public class ItemManagerTests
     {
-        List<Item> items = new List<Item>
+        private List<Item> items = new List<Item>
         {
             new Item{Id=1,Name="Test", CompatibiltyClass=Class.none,IsUsable=false,MinLevel=1}
         };

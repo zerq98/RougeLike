@@ -9,9 +9,9 @@ namespace RougeLike.Tests
 {
     public class CharacterServiceTests
     {
-        CharacterService characterService = new CharacterService();
+        private CharacterService characterService = new CharacterService();
 
-        Character character = new Character()
+        private Character character = new Character()
         {
             Name = "Test",
             Class = Class.berserker,
