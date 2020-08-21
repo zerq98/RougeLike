@@ -15,7 +15,7 @@ namespace RougeLike.App.Concrete
             character = new Character();
         }
 
-        public bool CreateCharacter(Class selectedClass, string name)
+        public bool CreateCharacter(CharacterClass selectedClass, string name)
         {
             character.Name = name;
             character.Class = selectedClass;
@@ -27,7 +27,7 @@ namespace RougeLike.App.Concrete
 
             switch (selectedClass)
             {
-                case Class.berserker:
+                case CharacterClass.berserker:
                     character.Health = 300;
                     character.MaxHealth = 300;
                     character.AttackDamage = 30;
@@ -35,7 +35,7 @@ namespace RougeLike.App.Concrete
                     character.AttackSpeed = 20;
                     break;
 
-                case Class.mage:
+                case CharacterClass.mage:
                     character.Health = 100;
                     character.MaxHealth = 100;
                     character.AttackDamage = 45;
@@ -43,7 +43,7 @@ namespace RougeLike.App.Concrete
                     character.AttackSpeed = 20;
                     break;
 
-                case Class.warrior:
+                case CharacterClass.warrior:
                     character.Health = 450;
                     character.MaxHealth = 450;
                     character.AttackDamage = 25;
@@ -51,7 +51,7 @@ namespace RougeLike.App.Concrete
                     character.AttackSpeed = 10;
                     break;
 
-                case Class.thief:
+                case CharacterClass.thief:
                     character.Health = 100;
                     character.MaxHealth = 100;
                     character.AttackDamage = 10;

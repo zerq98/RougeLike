@@ -13,20 +13,20 @@ namespace RougeLike.Tests
     {
         private List<Item> items = new List<Item>
         {
-            new Item{Id=1,Name="Test", CompatibiltyClass=Class.none,IsUsable=false,MinLevel=1}
+            new Item{Id=1,Name="Test", CompatibiltyClass=CharacterClass.none,IsUsable=false,MinLevel=1}
         };
 
         [Fact]
         public void Should_Return_Item()
         {
-            Item item = new Item { Id = 1, Name = "Test", CompatibiltyClass = Class.none, IsUsable = false, MinLevel = 1 };
+            Item item = new Item { Id = 1, Name = "Test", CompatibiltyClass = CharacterClass.none, IsUsable = false, MinLevel = 1 };
             var mock = new Mock<IItemService>();
             mock.Setup(s => s.GetCount()).Returns(1);
             mock.Setup(s => s.GetItem(0)).Returns(item);
 
             var manager = new ItemManager(mock.Object);
 
-            var selectedItem = manager.GetRandomItem(1, Class.none);
+            var selectedItem = manager.GetRandomItem(1, CharacterClass.none);
 
             selectedItem.Should().NotBeNull();
             selectedItem.Id.Should().BeOfType(typeof(int));
@@ -41,7 +41,7 @@ namespace RougeLike.Tests
 
             var manager = new ItemManager(mock.Object);
 
-            var selectedList = manager.GetShopStuff(1, Class.none);
+            var selectedList = manager.GetShopStuff(1, CharacterClass.none);
 
             selectedList.Should().NotBeNull();
             selectedList.Should().BeOfType(typeof(List<Item>));

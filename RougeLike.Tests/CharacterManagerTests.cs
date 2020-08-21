@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
 using RougeLike.App.Abstract;
+using RougeLike.App.Concrete;
 using RougeLike.App.Managers;
 using RougeLike.Domain.Common;
 using RougeLike.Domain.Entity;
@@ -14,7 +15,7 @@ namespace RougeLike.Tests
         private Character character = new Character()
         {
             Name = "Test",
-            Class = Class.warrior,
+            Class = CharacterClass.warrior,
             Health = 1,
             MaxHealth = 1,
             Level = 1,
@@ -34,7 +35,7 @@ namespace RougeLike.Tests
             mock.Setup(s => s.UpdateCharacter(character));
             mock.Setup(s => s.GetCharacter()).Returns(character);
 
-            var manager = new CharacterManager(mock.Object);
+            var manager = new CharacterManager(new MenuActionService(), mock.Object);
             manager.UpdateCharacterAfterFight(1, 1);
             var levelAfterUpdate = manager.GetHeroLevel();
 
@@ -47,13 +48,13 @@ namespace RougeLike.Tests
             var mock = new Mock<ICharacterService>();
             mock.Setup(s => s.GetCharacter()).Returns(character);
 
-            var manager = new CharacterManager(mock.Object);
+            var manager = new CharacterManager(new MenuActionService(), mock.Object);
 
             Item item = new Item()
             {
                 Id = 1,
                 Name = "Test item",
-                CompatibiltyClass = Class.warrior,
+                CompatibiltyClass = CharacterClass.warrior,
                 Cost = 1,
                 HeroStatToChange = "Attack Damage",
                 IsUsable = false,
@@ -77,7 +78,7 @@ namespace RougeLike.Tests
             {
                 Id = 0,
                 Name = "Test item",
-                CompatibiltyClass = Class.warrior,
+                CompatibiltyClass = CharacterClass.warrior,
                 Cost = 2,
                 HeroStatToChange = "Attack Damage",
                 IsUsable = false,
@@ -91,7 +92,7 @@ namespace RougeLike.Tests
             mock.Setup(s => s.UpdateCharacter(character));
             mock.Setup(s => s.GetCharacter()).Returns(character);
 
-            var manager = new CharacterManager(mock.Object);
+            var manager = new CharacterManager(new MenuActionService(), mock.Object);
 
             manager.SellItem(0);
             var checkMoney = manager.GetMoneyCount();
@@ -110,7 +111,7 @@ namespace RougeLike.Tests
             {
                 Id = 0,
                 Name = "Test item",
-                CompatibiltyClass = Class.warrior,
+                CompatibiltyClass = CharacterClass.warrior,
                 Cost = 2,
                 HeroStatToChange = "Attack Damage",
                 IsUsable = false,
@@ -123,7 +124,7 @@ namespace RougeLike.Tests
             mock.Setup(s => s.UpdateCharacter(character));
             mock.Setup(s => s.GetCharacter()).Returns(character);
 
-            var manager = new CharacterManager(mock.Object);
+            var manager = new CharacterManager(new MenuActionService(), mock.Object);
 
             manager.BuyItem(item);
             var checkMoney = manager.GetMoneyCount();

@@ -14,7 +14,7 @@ namespace RougeLike.Tests
         private Character character = new Character()
         {
             Name = "Test",
-            Class = Class.berserker,
+            Class = CharacterClass.berserker,
             Health = 1,
             MaxHealth = 1,
             Level = 1,
@@ -30,7 +30,7 @@ namespace RougeLike.Tests
         [Fact]
         public void Should_Create_Character()
         {
-            var isCreated = characterService.CreateCharacter(Class.warrior, "Test");
+            var isCreated = characterService.CreateCharacter(CharacterClass.warrior, "Test");
             var createdCharacter = characterService.GetCharacter();
             var checkCapacity = characterService.CheckCapacity();
 
@@ -47,7 +47,7 @@ namespace RougeLike.Tests
             var characterAfterUpdate = characterService.GetCharacter();
             var checkCapacity = characterService.CheckCapacity();
 
-            characterAfterUpdate.Class.Should().Be(Class.berserker);
+            characterAfterUpdate.Class.Should().Be(CharacterClass.berserker);
             characterAfterUpdate.AttackDamage.Should().Be(1);
             checkCapacity.Should().BeTrue();
         }

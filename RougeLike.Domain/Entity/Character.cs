@@ -12,7 +12,7 @@ namespace RougeLike.Domain.Entity
 
         public int NeededExperience { get; set; }
 
-        public Class Class { get; set; }
+        public CharacterClass Class { get; set; }
 
         public int Money { get; set; }
 

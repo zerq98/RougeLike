@@ -1,6 +1,5 @@
 ﻿using RougeLike.App.Abstract;
 using RougeLike.App.Common;
-using RougeLike.App.Concrete;
 using RougeLike.Domain.Common;
 using RougeLike.Domain.Entity;
 using System;
@@ -19,7 +18,7 @@ namespace RougeLike.App.Managers
             _itemService = itemService;
         }
 
-        public Item GetRandomItem(int level, Class classType)
+        public Item GetRandomItem(int level, CharacterClass classType)
         {
             Random random = new Random();
             Item item = null;
@@ -69,7 +68,7 @@ namespace RougeLike.App.Managers
             writer.Close();
         }
 
-        public List<Item> GetShopStuff(int level, Class classType)
+        public List<Item> GetShopStuff(int level, CharacterClass classType)
         {
             List<Item> items = _itemService.GetAll();
             List<Item> selected = new List<Item>();

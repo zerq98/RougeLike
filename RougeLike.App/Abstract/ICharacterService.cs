@@ -6,7 +6,7 @@ namespace RougeLike.App.Abstract
 {
     public interface ICharacterService
     {
-        bool CreateCharacter(Class selectedClass,string name);
+        bool CreateCharacter(CharacterClass selectedClass, string name);
 
         void CreateCharacter(Character loadCharacter);
 

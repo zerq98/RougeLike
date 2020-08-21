@@ -1,6 +1,6 @@
 ﻿namespace RougeLike.Domain.Common
 {
-    public enum Class
+    public enum CharacterClass
     {
         none,
         warrior = 1,

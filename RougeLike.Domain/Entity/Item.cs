@@ -12,7 +12,7 @@ namespace RougeLike.Domain.Entity
 
         public int Cost { get; set; }
 
-        public Class CompatibiltyClass { get; set; }
+        public CharacterClass CompatibiltyClass { get; set; }
 
         public int MinLevel { get; set; }
     }

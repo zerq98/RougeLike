@@ -1,5 +1,4 @@
-﻿using RougeLike.App.Abstract;
-using RougeLike.App.Common;
+﻿using RougeLike.App.Common;
 using RougeLike.App.Concrete;
 using RougeLike.App.Managers;
 using System;
@@ -15,7 +14,7 @@ namespace RougeLike
         public MainMenu(MenuActionService actionService)
         {
             _actionService = actionService;
-            _characterManager = new CharacterManager(new CharacterService());
+            _characterManager = new CharacterManager(_actionService, new CharacterService());
         }
 
         public void MenuView()
@@ -40,11 +39,11 @@ namespace RougeLike
                 switch (chosenOption)
                 {
                     case 1:
-                        var selectedClass = _characterManager.CreateCharacterView(_actionService);
+                        var selectedClass = _characterManager.CreateCharacterView();
                         Console.WriteLine();
                         Console.WriteLine($"Select name for your {selectedClass}");
                         var name = Console.ReadLine();
-                        if (_characterManager.CreateCharacter(selectedClass,name))
+                        if (_characterManager.CreateCharacter(selectedClass, name))
                         {
                             isUserInStart = false;
                         }

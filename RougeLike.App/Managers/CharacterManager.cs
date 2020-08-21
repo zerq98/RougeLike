@@ -10,16 +10,18 @@ namespace RougeLike.App.Managers
     public class CharacterManager
     {
         private readonly ICharacterService _characterService;
+        private readonly IMenuActionService _actionService;
         private Character characterUpdateModel;
 
-        public CharacterManager(ICharacterService characterService)
+        public CharacterManager(MenuActionService actionService, ICharacterService characterService)
         {
             _characterService = characterService;
+            _actionService = actionService;
         }
 
-        public Class CreateCharacterView(MenuActionService actionService)
+        public CharacterClass CreateCharacterView()
         {
-            List<MenuAction> selectClassMenu = actionService.GetMenuActionsByMenuName("Select Class");
+            List<MenuAction> selectClassMenu = _actionService.GetMenuActionsByMenuName("Select Class");
             int selectedClass;
 
             Console.WriteLine("Select class for your hero:");
@@ -33,12 +35,12 @@ namespace RougeLike.App.Managers
             var readedKey = Console.ReadKey();
             Int32.TryParse(readedKey.KeyChar.ToString(), out selectedClass);
 
-            return (Class)selectedClass;
+            return (CharacterClass)selectedClass;
         }
 
-        public bool CreateCharacter(Class selectedClass,string name)
+        public bool CreateCharacter(CharacterClass selectedClass, string name)
         {
-            return _characterService.CreateCharacter(selectedClass,name);
+            return _characterService.CreateCharacter(selectedClass, name);
         }
 
         public bool LoadCharacter()
@@ -101,7 +103,7 @@ namespace RougeLike.App.Managers
             return _characterService.GetCharacter().Level;
         }
 
-        public Class GetHeroClass()
+        public CharacterClass GetHeroClass()
         {
             return _characterService.GetCharacter().Class;
         }
